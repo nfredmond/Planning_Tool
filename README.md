@@ -169,11 +169,27 @@ Settings for maintenance planning implemented in `long_term_maintenance_planning
    docker-compose -f transportvoice/docker/docker-compose.yml up -d
    ```
 3. Access the application at http://localhost:3000
+
+   The Docker setup includes the following services:
+   - MongoDB 7.0 database with persistent storage
+   - NodeJS 20 backend server with all Python modules
+   - React frontend with Nginx
+   - Nginx reverse proxy and SSL support (production only)
+   - Certbot for SSL certificate management (production only)
    
    Note: If you encounter port conflicts with Docker, you can modify the port mappings in the docker-compose.yml file:
    ```
    ports:
      - "3001:80"  # Change 3000 to an available port
+   ```
+
+4. For production deployment:
+   ```
+   # First update your domain name
+   export DOMAIN_NAME=yourdomain.com
+   
+   # Then start with production profile
+   docker-compose -f transportvoice/docker/docker-compose.yml --profile production up -d
    ```
 
 ## API Integration
