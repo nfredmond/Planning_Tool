@@ -1,0 +1,101 @@
+transportvoice/
+├── client/                          # Frontend React application
+│   ├── public/
+│   │   ├── index.html
+│   │   └── assets/
+│   ├── src/
+│   │   ├── components/              # React components
+│   │   │   ├── common/              # Shared components
+│   │   │   ├── map/                 # Map-related components
+│   │   │   ├── comments/            # Comment system components
+│   │   │   ├── admin/               # Admin dashboard components
+│   │   │   └── analytics/           # Reporting and analytics components
+│   │   ├── context/                 # React Context providers
+│   │   ├── hooks/                   # Custom React hooks
+│   │   ├── services/                # API service clients
+│   │   ├── utils/                   # Utility functions
+│   │   ├── types/                   # TypeScript type definitions
+│   │   ├── pages/                   # Page components
+│   │   ├── theme/                   # Theme configuration
+│   │   ├── App.tsx                  # Main App component
+│   │   ├── app-routes.tsx           # Application routes
+│   │   ├── index.tsx                # Entry point
+│   │   ├── index.css                # Global styles
+│   │   ├── reportWebVitals.ts       # Performance monitoring
+│   │   ├── web-vitals.d.ts          # Type definitions for web vitals
+│   │   └── recharts.d.ts            # Type definitions for recharts
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── server/                          # Backend Node.js application
+│   ├── src/
+│   │   ├── api/                     # API routes
+│   │   │   ├── projects/            # Project-related endpoints
+│   │   │   ├── comments/            # Comment-related endpoints
+│   │   │   ├── users/               # User-related endpoints
+│   │   │   ├── admin/               # Admin endpoints
+│   │   │   └── ai/                  # AI integration endpoints
+│   │   ├── controllers/             # Request handlers
+│   │   ├── models/                  # Database models
+│   │   ├── services/                # Business logic services
+│   │   │   ├── ai/                  # AI integration services
+│   │   │   ├── map/                 # Map processing services
+│   │   │   └── analytics/           # Analytics services
+│   │   ├── middleware/              # Express middleware
+│   │   ├── utils/                   # Utility functions
+│   │   ├── config/                  # Configuration files
+│   │   └── app.ts                   # Main Express application
+│   ├── .env                         # Environment variables
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── database/                        # Database scripts and migrations
+│   ├── migrations/
+│   └── seeds/
+│
+├── docker/                          # Docker configuration
+│   ├── docker-compose.yml           # Docker Compose configuration
+│   ├── Dockerfile.client            # Client Docker configuration
+│   ├── Dockerfile.server            # Server Docker configuration
+│   ├── nginx/                       # Nginx configuration
+│   │   ├── default.conf             # Development Nginx configuration
+│   │   └── production.conf          # Production Nginx configuration with SSL
+│   └── certbot/                     # SSL certificate management
+│       ├── conf/                    # Certificate configuration
+│       └── www/                     # Certificate verification
+│
+├── README.md                        # Project documentation
+└── USER_MANUAL.md                   # User manual and documentation
+
+Project Root
+├── transportvoice/                  # Main project directory (see structure above)
+│
+├── src/                             # Additional source code
+│   ├── pages/                       # React pages
+│   ├── theme/                       # Theme configuration
+│   ├── App.tsx                      # Main application component
+│   ├── implementation_tools.py      # Implementation tools module
+│   ├── collaborative_design_tools.py # Collaborative design tools
+│   ├── long_term_maintenance_planning.py # Maintenance planning tools
+│   ├── global_knowledge_exchange.py # Knowledge exchange functionality
+│   ├── cross_departmental_collaboration.py # Collaboration utilities
+│   ├── data_privacy_security.py     # Privacy and security utilities
+│   ├── emergency_resilience_planning.py # Emergency planning tools
+│   ├── educational_components.py    # Educational functionality
+│   └── accessibility_inclusive_design.py # Accessibility tools
+│
+├── docs/                            # Documentation
+│   ├── to-do.txt                    # To-do list
+│   ├── original_prompt.txt          # Original project description
+│   ├── upgrades1.txt                # Planned upgrades
+│   └── project-documentation.txt    # Project documentation
+│
+├── data/                            # Data files
+│   └── designs/                     # Design assets
+│
+├── package.json                     # Node.js dependencies
+├── package-lock.json                # Node.js dependency lock file
+├── tsconfig.json                    # TypeScript configuration
+├── engagement_enhancements.py       # Engagement functionality
+├── Claude.code-workspace            # VS Code workspace configuration
+└── project-structure.txt            # This file - project structure documentation

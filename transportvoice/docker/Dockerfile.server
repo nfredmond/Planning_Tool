@@ -1,0 +1,47 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install Python 3.11 and required packages for Python modules
+RUN apk add --no-cache python3 py3-pip build-base python3-dev
+
+# Copy package.json and package-lock.json
+COPY server/package*.json ./
+
+# Install dependencies
+RUN npm ci --silent
+
+# Copy the rest of the application
+COPY server/ .
+
+# Copy Python modules and requirements
+COPY *.py ./
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Build TypeScript
+RUN npm run build
+
+# Set environment variables for the application
+# These will be overridden by docker-compose environment settings
+ENV NODE_ENV=production
+ENV PORT=5000
+ENV MONGODB_URI=mongodb://mongo:27017/transportvoice
+ENV JWT_SECRET=change_this_in_production
+ENV JWT_EXPIRES_IN=7d
+ENV CLIENT_URL=http://localhost:3000
+ENV OPENAI_API_KEY=
+ENV ANTHROPIC_API_KEY=
+ENV GEMINI_API_KEY=
+
+# Expose port
+EXPOSE 5000
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:$PORT/api/health || exit 1
+
+# Start the application
+CMD ["npm", "start"] 
