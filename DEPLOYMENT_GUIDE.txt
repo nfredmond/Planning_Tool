@@ -1,0 +1,267 @@
+# DEPLOYMENT GUIDE FOR A2 HOSTING WITH CPANEL
+
+This guide provides step-by-step instructions for deploying the TransportVoice application
+to A2 Hosting using cPanel and GitHub.
+
+## Prerequisites
+1. A2 Hosting account with cPanel access
+2. Your project code uploaded to GitHub
+3. Basic knowledge of terminal commands
+
+## Step 1: Access Your cPanel Terminal
+
+1. Log in to your A2 Hosting cPanel (usually at https://yourdomain.com/cpanel)
+2. Find and click on "Terminal" or "SSH Access" under the "Advanced" section
+3. This will open a web-based terminal session
+
+## Step 2: Navigate to Your Project Directory
+
+```bash
+# Navigate to your project directory
+cd planning_tool/transportvoice
+```
+
+## Step 3: Set Up Environment Files
+
+Create or edit your server .env file:
+
+```bash
+nano .env
+```
+
+Add these environment variables (replace with your actual values):
+
+```
+NODE_ENV=production
+PORT=5000
+MONGO_URI=mongodb://username:password@localhost:27017/your_database
+JWT_SECRET=your_secure_jwt_secret
+JWT_EXPIRATION=1d
+CLIENT_URL=https://yourdomain.com
+
+# Email Configuration
+EMAIL_HOST=mail.yourdomain.com
+EMAIL_PORT=587
+EMAIL_USER=your_email_user
+EMAIL_PASS=your_email_password
+EMAIL_FROM=noreply@yourdomain.com
+
+# Encryption key
+ENCRYPTION_KEY=your_secure_encryption_key
+
+# Mapbox token
+MAPBOX_TOKEN=your_mapbox_token
+```
+
+Save and exit (Ctrl+X, then Y, then Enter)
+
+Create or edit your client .env file:
+
+```bash
+nano client/.env
+```
+
+Add these environment variables (replace with your actual values):
+
+```
+REACT_APP_API_URL=https://yourdomain.com/api
+REACT_APP_MAPBOX_TOKEN=your_mapbox_token
+REACT_APP_ENABLE_AI_FEATURES=true
+```
+
+Save and exit (Ctrl+X, then Y, then Enter)
+
+## Step 4: Set Up MongoDB Database
+
+1. In cPanel, go to "Databases" section and click on "MongoDB Databases"
+2. Create a new MongoDB database with a secure username and password
+3. Note the connection string, which will be similar to:
+   ```
+   mongodb://username:password@localhost:27017/database_name
+   ```
+4. Update your .env file with this connection string
+
+## Step 5: Install Dependencies and Build the Application
+
+```bash
+# Install server dependencies
+npm install --production
+
+# Navigate to client directory and build frontend
+cd client
+npm install
+npm run build
+cd ..
+```
+
+## Step 6: Set Up Node.js Application
+
+### Option 1: Using PM2 Process Manager (Recommended)
+
+```bash
+# Install PM2 globally
+npm install -g pm2
+
+# Create a PM2 ecosystem file
+cat > ecosystem.config.js << 'EOL'
+module.exports = {
+  apps: [{
+    name: "transportvoice",
+    script: "./server/src/app.js",
+    env: {
+      NODE_ENV: "production",
+    }
+  }]
+};
+EOL
+
+# Start your application
+pm2 start ecosystem.config.js
+
+# Set up PM2 to start on server reboot
+pm2 startup
+pm2 save
+```
+
+### Option 2: Using Passenger
+
+```bash
+# Create a Passenger startup file
+cat > passenger.js << 'EOL'
+const path = require('path');
+const server = require('./server/src/app');
+EOL
+
+# Then configure your domain to use Node.js in cPanel:
+# 1. Go to "Setup Node.js App"
+# 2. Select your domain
+# 3. Application mode: Production
+# 4. Application root: Your application path
+# 5. Application URL: Your domain or subdomain
+# 6. Application startup file: passenger.js
+```
+
+## Step 7: Configure Apache (.htaccess)
+
+```bash
+# Create or edit .htaccess file
+cat > .htaccess << 'EOL'
+# Enable rewrite engine
+RewriteEngine On
+
+# Serve static files from client/build
+RewriteCond %{REQUEST_URI} !^/client/build/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Forward API requests to Node.js app
+RewriteRule ^api/(.*)$ http://localhost:5000/api/$1 [P,L]
+
+# Serve React app for other requests
+RewriteRule ^(.*)$ /client/build/index.html [L]
+EOL
+```
+
+## Step 8: Initialize Database
+
+```bash
+npm run db:init
+```
+
+## Step 9: Set File Permissions
+
+```bash
+chmod -R 755 .
+find . -type f -exec chmod 644 {} \;
+```
+
+## Step 10: Set Up SSL Certificate
+
+1. In cPanel, go to "SSL/TLS" section
+2. Click on "Install and Manage SSL for your site (HTTPS)"
+3. Choose your domain
+4. Click "Install Free SSL Certificate" (Let's Encrypt)
+5. Follow the prompts to complete the installation
+
+## Step 11: Test Your Deployment
+
+Visit your website (https://yourdomain.com) and test all key functionality:
+- User registration/login
+- Map interactions
+- Community feedback features
+- Admin functionality
+
+## Troubleshooting
+
+### Application Not Starting
+```bash
+# Check PM2 logs
+pm2 logs
+
+# Check if Node.js is running
+ps aux | grep node
+```
+
+### Database Connection Issues
+```bash
+# Verify MongoDB connection
+mongo -u username -p password database_name
+```
+
+### File Permission Issues
+```bash
+# Set proper permissions
+chmod -R 755 .
+chmod -R 644 ./client/build
+```
+
+### Memory Limitations
+If you encounter memory limitations, contact A2 Hosting support to adjust your account limits.
+
+### Apache Configuration Issues
+Check Apache error logs in cPanel (under "Metrics" > "Errors").
+
+## Auto-Updating from GitHub
+
+1. In cPanel, go to "Git Version Control"
+2. Select your repository
+3. Click "Manage"
+4. Go to the "Pull or Deploy" tab
+5. Copy the webhook URL
+6. Add this URL to your GitHub repository's webhooks
+7. Configure post-receive actions to automatically:
+   - Pull the latest code
+   - Install dependencies
+   - Build the client
+   - Restart the application
+
+## Maintenance
+
+1. Monitor application logs regularly:
+   ```bash
+   pm2 logs
+   ```
+
+2. Set up regular database backups:
+   ```bash
+   # In cPanel, go to "Backup" section
+   # Configure automated backups
+   ```
+
+3. Update your application when needed:
+   ```bash
+   # Pull latest changes
+   git pull origin main
+   
+   # Update dependencies and rebuild
+   npm install --production
+   cd client
+   npm install
+   npm run build
+   cd ..
+   
+   # Restart application
+   pm2 restart transportvoice
+   ```
+
+For additional support, please contact your A2 Hosting support team. 

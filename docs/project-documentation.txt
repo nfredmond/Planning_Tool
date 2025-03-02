@@ -1,0 +1,467 @@
+# TransportVoice
+
+TransportVoice is an open-source transportation planning community outreach platform that enables collaborative engagement between planning agencies and communities. The platform allows users to provide location-specific feedback on planning projects through an interactive map interface, with features like comment moderation, AI-powered analysis, and comprehensive reporting tools.
+
+![TransportVoice Screenshot](docs/images/screenshot.png)
+
+## Features
+
+- **Interactive Maps:** Visualize transportation projects with custom layers and allow pin-point commenting
+- **Community Feedback:** Gather and categorize community input with voting and image uploads
+- **AI Integration:** Leverage AI for comment moderation, sentiment analysis, and feedback summarization
+- **Flexible Administration:** Create and manage multiple projects with customizable settings
+- **Data Visualization:** Generate insightful reports and visualize trends in community feedback
+- **Responsive Design:** Accessible on all devices, ensuring everyone can participate
+- **Engagement Enhancements:** Foster deeper community engagement through scenario testing, gamification, virtual meetings, and follow-up notifications
+
+## Technology Stack
+
+- **Frontend:**
+  - React with TypeScript
+  - Material-UI for UI components
+  - MapboxGL for interactive maps
+  - Recharts for data visualization
+
+- **Backend:**
+  - Node.js 20.x with Express
+  - MongoDB 7.0 for data storage
+  - JWT for authentication
+  - Mongoose for data modeling
+
+- **AI Integration:**
+  - Modular design supporting multiple AI providers
+  - Integration with OpenAI, Anthropic Claude, and Google Gemini
+
+- **Deployment:**
+  - Docker and Docker Compose
+  - Nginx for reverse proxy
+  - Support for SSL/TLS with automatic certificate renewal
+  - Health checks for all services
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- MongoDB 7.0+
+- Python 3.11+
+- Docker and Docker Compose (for containerized deployment)
+- Mapbox API key
+- (Optional) OpenAI, Anthropic, or Google Gemini API key for AI features
+
+### Installation and Setup
+
+#### Environment Configuration
+
+1. Clone the repository and navigate to the project directory
+2. Copy `.env.example` to `.env.local` and update the values:
+   ```
+   cp .env.example .env.local
+   ```
+3. Configure your API keys and other settings in `.env.local`
+4. If you encounter port conflicts, you can modify these port settings in your `.env.local` file:
+   ```
+   CLIENT_PORT=3001  # Change from default 3000 if port is already in use
+   SERVER_PORT=5001  # Change from default 5000 if port is already in use
+   MONGO_PORT=27018  # Change from default 27017 if port is already in use
+   ```
+
+#### Development Setup
+
+For local development:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/transportvoice.git
+   cd transportvoice
+   ```
+
+2. Install server dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Install client dependencies:
+   ```bash
+   cd client
+   npm install
+   cd ..
+   ```
+
+4. Create a `.env` file in the root directory:
+   ```
+   # Server Configuration
+   NODE_ENV=development
+   PORT=5000
+   MONGO_URI=mongodb://localhost:27017/transportvoice
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRATION=1d
+   CLIENT_URL=http://localhost:3000
+
+   # Email Configuration
+   EMAIL_HOST=smtp.example.com
+   EMAIL_PORT=587
+   EMAIL_USER=your_email_user
+   EMAIL_PASS=your_email_password
+   EMAIL_FROM=noreply@transportvoice.org
+
+   # Encryption (for API keys)
+   ENCRYPTION_KEY=your_encryption_key
+   ```
+
+5. Create a `.env` file in the `client` directory:
+   ```
+   REACT_APP_API_URL=http://localhost:5000/api
+   REACT_APP_MAPBOX_TOKEN=your_mapbox_token
+   ```
+
+6. Initialize the database:
+   ```bash
+   npm run db:init
+   ```
+
+7. Start the development server:
+   ```bash
+   # Start backend and frontend concurrently
+   npm run dev
+   
+   # Or start separately:
+   npm run server:dev
+   npm run client:dev
+   ```
+
+8. Access the application at `http://localhost:3000`
+
+#### Docker Deployment
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/transportvoice.git
+   cd transportvoice
+   ```
+
+2. Create a `.env` file in the root directory with the following variables:
+   ```
+   # MongoDB Configuration
+   MONGO_ROOT_USERNAME=admin
+   MONGO_ROOT_PASSWORD=secure_password
+   MONGO_USERNAME=transportvoice
+   MONGO_PASSWORD=tv-password
+
+   # Node Environment
+   NODE_ENV=production
+
+   # JWT Configuration
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRATION=1d
+
+   # External URLs
+   CLIENT_URL=http://localhost:3000
+   API_URL=http://localhost:5000/api
+
+   # Email Configuration
+   EMAIL_HOST=smtp.example.com
+   EMAIL_PORT=587
+   EMAIL_USER=your_email_user
+   EMAIL_PASS=your_email_password
+   EMAIL_FROM=noreply@transportvoice.org
+
+   # Mapbox Token
+   MAPBOX_TOKEN=your_mapbox_token
+
+   # AI Integration (optional)
+   ANTHROPIC_API_KEY=your_anthropic_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   GEMINI_API_KEY=your_gemini_api_key
+
+   # Encryption (for API keys)
+   ENCRYPTION_KEY=your_encryption_key
+   ```
+
+3. Run Docker Compose:
+   ```bash
+   docker-compose -f docker/docker-compose.yml up -d
+   ```
+
+4. Access the application at `http://localhost:3000`
+
+Note: The Docker setup includes healthchecks for all services to ensure proper startup sequence. The server container will only start after the MongoDB container is healthy, and the client container will only start after the server container has started.
+
+### Default Admin Credentials
+
+After initialization, you can login with the following admin credentials:
+
+- Email: `admin@transportvoice.org`
+- Password: `Admin123!`
+
+Please change these credentials immediately after first login.
+
+## Project Structure
+
+```
+transportvoice/
+├── client/                      # Frontend React application
+│   ├── public/                  # Static assets
+│   │   ├── components/          # React components
+│   │   ├── context/             # React context providers
+│   │   ├── hooks/               # Custom React hooks
+│   │   ├── pages/               # Page components
+│   │   ├── services/            # API service clients
+│   │   ├── types/               # TypeScript type definitions
+│   │   ├── utils/               # Utility functions
+│   │   ├── App.tsx              # Main App component
+│   │   └── index.tsx            # Entry point
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── server/                      # Backend Node.js application
+│   ├── src/                     # Server source code
+│   │   ├── api/                 # API routes
+│   │   ├── models/              # Database models
+│   │   ├── services/            # Business logic services
+│   │   ├── middleware/          # Express middleware
+│   │   ├── utils/               # Utility functions
+│   │   ├── config/              # Configuration files
+│   │   └── app.ts               # Main Express application
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── database/                    # Database scripts and migrations
+│   ├── migrations/
+│   └── seeds/
+│
+├── docker/                      # Docker configuration
+│   ├── docker-compose.yml
+│   ├── Dockerfile.client
+│   └── Dockerfile.server
+│
+├── uploads/                     # Uploaded files storage
+│   ├── images/                  # User uploaded images
+│   └── layers/                  # Map layers (KML, GeoJSON, etc.)
+│
+├── *.py                         # Python modules for enhanced functionality
+│   ├── engagement_enhancements.py  # Community engagement features
+│   ├── accessibility_inclusive_design.py  # Accessibility features
+│   ├── collaborative_design_tools.py  # Collaborative tools
+│   └── other modules...         # Additional functionality modules
+│
+└── README.md                    # Project documentation
+```
+
+## Development
+
+### Running Tests
+
+```bash
+# Run backend tests
+npm run test:server
+
+# Run frontend tests
+npm run test:client
+
+# Run all tests
+npm test
+```
+
+### Database Migrations
+
+```bash
+# Run migrations up
+npm run db:migrate
+
+# Run migrations down
+npm run db:migrate:down
+
+# Create a new migration
+npm run db:migration:create -- your_migration_name
+```
+
+### API Documentation
+
+API documentation is available at `/api/docs` when running in development mode.
+
+## Engagement Enhancements Module
+
+The `engagement_enhancements.py` module provides advanced community engagement features designed to increase public participation and improve the quality of feedback in transportation projects.
+
+### Features
+
+#### Scenario Testing
+Allows planners to create and manage multiple scenarios (alternatives) for the same project area and collect specific feedback for each option. This helps in comparing community preferences across different design proposals.
+
+```python
+# Example usage
+ee = EngagementEnhancements()
+ee.add_scenario("Downtown", "Transit Option A", "Increase bus frequency and add bike lanes.")
+ee.add_scenario("Downtown", "Transit Option B", "Add light rail options and pedestrian zones.")
+ee.compare_scenarios("Downtown")
+```
+
+#### Gamification Elements
+Increases engagement through achievement-based rewards like badges. Community members can earn recognition for quality contributions or reaching participation milestones.
+
+```python
+# Example usage
+ee.award_badge("user123", "Community Champion")
+```
+
+#### Virtual Community Meetings
+Integrates video conferencing with interactive whiteboarding capabilities specifically designed for transportation planning meetings. This allows real-time discussions focused on project maps and plans.
+
+```python
+# Example usage
+ee.setup_virtual_meeting("meeting1", "https://video-conference.example.com/meeting1")
+```
+
+#### Follow-up Engagement Loops
+Automatically notifies community members when their suggestions are addressed or implemented, creating a feedback loop that demonstrates the value of participation and increases trust.
+
+```python
+# Example usage
+ee.notify_follow_up("user456", "Consider more green areas.", "Approved increased park zones")
+```
+
+### Integration with Admin Dashboard
+The Engagement Enhancements module is integrated with the admin dashboard, allowing project managers to configure and monitor all engagement features through a user-friendly interface.
+
+## Deployment
+
+### Production Considerations
+
+1. **Security:**
+   - Set strong passwords for MongoDB
+   - Generate secure JWT secret keys
+   - Implement proper SSL certificates
+   - Review application permissions
+
+2. **Performance:**
+   - Enable caching for static assets
+   - Consider implementing database indexes for large datasets
+   - Optimize image uploads with compression
+
+3. **Scalability:**
+   - Implement load balancing for multiple instances
+   - Set up proper monitoring and alerting
+   - Consider database scaling strategies
+
+### Production Environment Variables
+
+For production deployments, ensure you set appropriate values for:
+
+```
+NODE_ENV=production
+MONGO_URI=(secure MongoDB connection string)
+JWT_SECRET=(strong random string)
+ENCRYPTION_KEY=(strong random string)
+```
+
+## Contributing
+
+We welcome contributions to TransportVoice! Please check our [Contributing Guidelines](CONTRIBUTING.md) for more information.
+
+### Code of Conduct
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing to the project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For questions, feature requests, or support, please:
+
+1. Check the [Documentation](docs/)
+2. Open an issue on GitHub
+3. Contact us at support@transportvoice.org
+
+---
+
+# server/.env.example
+# Node Environment
+NODE_ENV=development
+PORT=5000
+
+# MongoDB Connection
+MONGO_URI=mongodb://localhost:27017/transportvoice
+
+# JWT Authentication
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRATION=1d
+
+# Client URL (for CORS and email links)
+CLIENT_URL=http://localhost:3000
+
+# Email Configuration
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=your_email_user
+EMAIL_PASS=your_email_password
+EMAIL_FROM=noreply@transportvoice.org
+
+# Encryption (for API keys)
+ENCRYPTION_KEY=your_encryption_key_here
+
+# Mapbox (for server-side operations)
+MAPBOX_TOKEN=your_mapbox_token
+
+# Logging
+LOG_LEVEL=info
+
+# client/.env.example
+# API URL
+REACT_APP_API_URL=http://localhost:5000/api
+
+# Mapbox Token
+REACT_APP_MAPBOX_TOKEN=your_mapbox_token
+
+# Feature Flags
+REACT_APP_ENABLE_AI_FEATURES=true
+
+# Analytics (optional)
+REACT_APP_GA_TRACKING_ID=
+
+## Docker Configuration
+
+The application uses Docker and Docker Compose for containerized deployment. The Docker setup consists of the following services:
+
+### MongoDB
+- Runs MongoDB 7.0
+- Persistent data storage with Docker volumes
+- Health checks to ensure database availability
+
+### Server
+- Node.js 20 with Express
+- Includes all Python modules and dependencies
+- Connects to MongoDB and provides RESTful API
+- Health checks to monitor API availability
+
+### Client
+- React application built with Node.js 20
+- Served via Nginx for optimal performance
+- Configured with environment variables at build time
+
+### Nginx (Production Only)
+- Reverse proxy for the client and server
+- SSL/TLS support with Let's Encrypt certificates
+- HTTP to HTTPS redirection
+- Health checks to monitor web server availability
+
+### Certbot (Production Only)
+- Automatic SSL/TLS certificate generation and renewal
+- Works with Nginx for seamless HTTPS support
+
+## Python Modules
+
+The application integrates various Python modules for enhanced functionality. These modules are automatically included in the Docker build:
+
+- `accessibility_inclusive_design.py`: Features for accessibility and inclusive design
+- `collaborative_design_tools.py`: Tools for collaborative design
+- `cross_departmental_collaboration.py`: Features for cross-department collaboration
+- `data_privacy_security.py`: Data privacy and security features
+- `educational_components.py`: Educational and tutorial components
+- `emergency_resilience_planning.py`: Emergency planning features
+- `engagement_enhancements.py`: Community engagement enhancements
+- `global_knowledge_exchange.py`: Global knowledge exchange features
+- `implementation_tools.py`: Implementation and tracking tools
+- `long_term_maintenance_planning.py`: Maintenance planning features

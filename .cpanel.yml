@@ -1,0 +1,18 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/dotdashb/planning_tool
+    - /bin/cp -R transportvoice $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R docs $DEPLOYPATH
+    
+    # Install dependencies and build the client
+    - cd $DEPLOYPATH/transportvoice
+    - npm install --production
+    - cd $DEPLOYPATH/transportvoice/client
+    - npm install
+    - npm run build
+    
+    # Set proper file permissions
+    - chmod -R 755 $DEPLOYPATH
+    - find $DEPLOYPATH -type f -exec chmod 644 {} \; 

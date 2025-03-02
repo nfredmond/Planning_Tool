@@ -1,0 +1,29 @@
+{
+  "name": "transportvoice",
+  "version": "1.0.0",
+  "description": "TransportVoice - A platform for better transportation experiences",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/src/index.js",
+    "server": "cd server && npm start",
+    "server:dev": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "client:build": "cd client && npm run build",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "prod": "cd client && npm run build && cd ../server && NODE_ENV=production npm start"
+  },
+  "keywords": [
+    "transportation",
+    "community",
+    "planning",
+    "react",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
