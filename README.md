@@ -192,6 +192,19 @@ Settings for maintenance planning implemented in `long_term_maintenance_planning
    docker-compose -f transportvoice/docker/docker-compose.yml --profile production up -d
    ```
 
+#### Using A2 Hosting with cPanel
+
+The application is configured for automatic deployment using A2 Hosting's Git Version Control feature:
+
+1. Setup A2 Hosting account with cPanel access
+2. In cPanel, go to "Git Version Control" and create a new repository
+3. Connect your GitHub repository by setting the remote URL
+4. The `.cpanel.yml` file in the repository root handles the deployment configuration
+5. Use the "Deploy HEAD Commit" button in cPanel to deploy changes
+6. For automatic deployment, set up webhooks as described in the A2 Hosting documentation
+
+For detailed deployment instructions, refer to the documentation in the `docs/` directory.
+
 ## API Integration
 
 The application uses REST APIs to communicate between the frontend and backend Python modules. API endpoints are documented in `src/api/configurationAPI.ts`.

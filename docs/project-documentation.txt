@@ -344,6 +344,40 @@ The Engagement Enhancements module is integrated with the admin dashboard, allow
    - Set up proper monitoring and alerting
    - Consider database scaling strategies
 
+### A2 Hosting with cPanel Deployment
+
+The project is configured for deployment on A2 Hosting using cPanel's Git Version Control feature:
+
+1. **Setup Repository in cPanel:**
+   - Log in to your A2 Hosting cPanel
+   - Navigate to "Git Version Control"
+   - Create a new repository or manage an existing one
+   - Set the remote URL to your GitHub repository: `https://github.com/yourusername/transportvoice.git`
+   - Set the branch to `main`
+
+2. **Automated Deployment Configuration:**
+   - The `.cpanel.yml` file in the repository root configures the deployment process
+   - It copies files to the appropriate directories
+   - Installs dependencies and builds the client application
+   - Sets proper file permissions
+
+3. **Deployment Process:**
+   - After pushing changes to GitHub, go to cPanel Git Version Control
+   - Navigate to your repository and click "Manage"
+   - Go to the "Pull or Deploy" tab
+   - Click "Deploy HEAD Commit" to deploy the latest changes
+
+4. **Webhook Integration:**
+   - For automatic deployment, set up a webhook in GitHub
+   - In cPanel Git Version Control, copy the webhook URL
+   - Add this URL to your GitHub repository webhooks
+   - Configure to trigger on push events to the main branch
+   
+5. **Troubleshooting:**
+   - If deployment fails, check that the `.cpanel.yml` file exists
+   - Ensure there are no uncommitted changes in the repository
+   - Review Apache error logs in cPanel (under "Metrics" > "Errors")
+
 ### Production Environment Variables
 
 For production deployments, ensure you set appropriate values for:
@@ -354,114 +388,3 @@ MONGO_URI=(secure MongoDB connection string)
 JWT_SECRET=(strong random string)
 ENCRYPTION_KEY=(strong random string)
 ```
-
-## Contributing
-
-We welcome contributions to TransportVoice! Please check our [Contributing Guidelines](CONTRIBUTING.md) for more information.
-
-### Code of Conduct
-
-Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing to the project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For questions, feature requests, or support, please:
-
-1. Check the [Documentation](docs/)
-2. Open an issue on GitHub
-3. Contact us at support@transportvoice.org
-
----
-
-# server/.env.example
-# Node Environment
-NODE_ENV=development
-PORT=5000
-
-# MongoDB Connection
-MONGO_URI=mongodb://localhost:27017/transportvoice
-
-# JWT Authentication
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRATION=1d
-
-# Client URL (for CORS and email links)
-CLIENT_URL=http://localhost:3000
-
-# Email Configuration
-EMAIL_HOST=smtp.example.com
-EMAIL_PORT=587
-EMAIL_USER=your_email_user
-EMAIL_PASS=your_email_password
-EMAIL_FROM=noreply@transportvoice.org
-
-# Encryption (for API keys)
-ENCRYPTION_KEY=your_encryption_key_here
-
-# Mapbox (for server-side operations)
-MAPBOX_TOKEN=your_mapbox_token
-
-# Logging
-LOG_LEVEL=info
-
-# client/.env.example
-# API URL
-REACT_APP_API_URL=http://localhost:5000/api
-
-# Mapbox Token
-REACT_APP_MAPBOX_TOKEN=your_mapbox_token
-
-# Feature Flags
-REACT_APP_ENABLE_AI_FEATURES=true
-
-# Analytics (optional)
-REACT_APP_GA_TRACKING_ID=
-
-## Docker Configuration
-
-The application uses Docker and Docker Compose for containerized deployment. The Docker setup consists of the following services:
-
-### MongoDB
-- Runs MongoDB 7.0
-- Persistent data storage with Docker volumes
-- Health checks to ensure database availability
-
-### Server
-- Node.js 20 with Express
-- Includes all Python modules and dependencies
-- Connects to MongoDB and provides RESTful API
-- Health checks to monitor API availability
-
-### Client
-- React application built with Node.js 20
-- Served via Nginx for optimal performance
-- Configured with environment variables at build time
-
-### Nginx (Production Only)
-- Reverse proxy for the client and server
-- SSL/TLS support with Let's Encrypt certificates
-- HTTP to HTTPS redirection
-- Health checks to monitor web server availability
-
-### Certbot (Production Only)
-- Automatic SSL/TLS certificate generation and renewal
-- Works with Nginx for seamless HTTPS support
-
-## Python Modules
-
-The application integrates various Python modules for enhanced functionality. These modules are automatically included in the Docker build:
-
-- `accessibility_inclusive_design.py`: Features for accessibility and inclusive design
-- `collaborative_design_tools.py`: Tools for collaborative design
-- `cross_departmental_collaboration.py`: Features for cross-department collaboration
-- `data_privacy_security.py`: Data privacy and security features
-- `educational_components.py`: Educational and tutorial components
-- `emergency_resilience_planning.py`: Emergency planning features
-- `engagement_enhancements.py`: Community engagement enhancements
-- `global_knowledge_exchange.py`: Global knowledge exchange features
-- `implementation_tools.py`: Implementation and tracking tools
-- `long_term_maintenance_planning.py`: Maintenance planning features

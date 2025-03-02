@@ -152,7 +152,39 @@ For production deployment with HTTPS:
    docker-compose -f docker/docker-compose.yml --profile production up -d
    ```
 
-For more details, see the [User Manual](./USER_MANUAL.md).
+## A2 Hosting Deployment with cPanel
+
+The application is configured for automatic deployment to A2 Hosting using Git Version Control:
+
+1. **Prerequisites:**
+   - A2 Hosting account with cPanel access
+   - GitHub repository with the TransportVoice application code
+
+2. **Initial Setup:**
+   - Log in to your A2 Hosting cPanel
+   - Navigate to "Git Version Control" and create a new repository
+   - Set the repository path to `/home/yourusername/planning_tool`
+   - Set the remote URL to your GitHub repository URL
+   - Set the branch to `main`
+
+3. **Deployment Configuration:**
+   - The `.cpanel.yml` file in the repository root handles the deployment automation
+   - This file defines how files are copied, dependencies are installed, and permissions are set
+   - Make sure this file exists in your main branch
+
+4. **Deployment Process:**
+   - After pushing changes to GitHub, log in to your A2 Hosting cPanel
+   - Go to "Git Version Control" > your repository > "Manage"
+   - Navigate to the "Pull or Deploy" tab
+   - Click "Deploy HEAD Commit" to deploy your changes
+
+5. **Automatic Deployment:**
+   - For automatic deployment, set up GitHub webhooks
+   - In cPanel Git Version Control, copy your webhook URL
+   - Add this URL to your GitHub repository settings > Webhooks
+   - Configure it to trigger on push events to the main branch
+
+For more details on troubleshooting and advanced configuration, see the documentation in the `docs/` directory.
 
 ## License
 
