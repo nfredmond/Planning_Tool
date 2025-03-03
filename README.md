@@ -107,6 +107,16 @@ Settings for maintenance planning implemented in `long_term_maintenance_planning
 
 ## Development
 
+### Branching Strategy
+
+This project uses a structured Git branching strategy to separate development work from production-ready code:
+
+- **`main`** branch contains the stable, production-ready code
+- **`development`** branch is where all development work is integrated before moving to production
+- Feature branches and bugfix branches are created from `development`
+
+For detailed information on the branching workflow, please see [BRANCHING.md](BRANCHING.md).
+
 ### Prerequisites
 
 - Node.js 20+

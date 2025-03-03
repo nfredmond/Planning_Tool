@@ -1,7 +1,12 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/dotdashb/planning_tool
+    # Deploy only from the main branch for production environment
+    - if [ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]; then
+        export DEPLOYPATH=/home/dotdashb/planning_tool;
+      else
+        export DEPLOYPATH=/home/dotdashb/planning_tool_dev;
+      fi
     - /bin/cp -R transportvoice $DEPLOYPATH
     - /bin/cp -R public $DEPLOYPATH
     - /bin/cp -R docs $DEPLOYPATH
