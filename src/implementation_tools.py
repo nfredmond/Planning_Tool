@@ -482,8 +482,8 @@ def _calculate_date_difference(start_date_str: str, end_date_str: str) -> float:
     """
     try:
         # Parse ISO format dates
-        start_date = datetime.datetime.fromisoformat(start_date_str.replace('Z', '+00:00'))
-        end_date = datetime.datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
+        start_date = datetime.fromisoformat(start_date_str.replace('Z', '+00:00'))
+        end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
         
         # Calculate difference in days
         difference = (end_date - start_date).total_seconds() / (24 * 3600)

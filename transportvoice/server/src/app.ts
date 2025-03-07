@@ -10,7 +10,7 @@ import csurf from 'csurf';
 import { errorHandler } from './middleware/errorHandler';
 import routes from './api/routes';
 import aiRoutes from './api/ai/aiRoutes';
-import mongoose from 'mongoose';
+import { connectDB } from './config/database';
 
 // Load environment variables
 dotenv.config();
@@ -19,18 +19,7 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
-const connectDB = async () => {
-  try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/transportvoice';
-    await mongoose.connect(mongoURI);
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
-
+// Connect to MongoDB Atlas
 connectDB();
 
 // Middleware
